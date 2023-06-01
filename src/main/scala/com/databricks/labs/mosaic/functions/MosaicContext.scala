@@ -151,6 +151,7 @@ class MosaicContext(indexSystem: IndexSystem, geometryAPI: GeometryAPI, rasterAP
         mosaicRegistry.registerExpression[ST_Difference](expressionConfig)
         mosaicRegistry.registerExpression[ST_Buffer](expressionConfig)
         mosaicRegistry.registerExpression[ST_Envelope](expressionConfig)
+        mosaicRegistry.registerExpression[ST_Endpoint](expressionConfig)
         mosaicRegistry.registerExpression[ST_GeometryType](expressionConfig)
         mosaicRegistry.registerExpression[ST_HasValidCoordinates](expressionConfig)
         mosaicRegistry.registerExpression[ST_Intersection](expressionConfig)
@@ -514,6 +515,7 @@ class MosaicContext(indexSystem: IndexSystem, geometryAPI: GeometryAPI, rasterAP
         def st_difference(geom1: Column, geom2: Column): Column = ColumnAdapter(ST_Difference(geom1.expr, geom2.expr, expressionConfig))
         def st_distance(geom1: Column, geom2: Column): Column = ColumnAdapter(ST_Distance(geom1.expr, geom2.expr, expressionConfig))
         def st_dump(geom: Column): Column = ColumnAdapter(FlattenPolygons(geom.expr, geometryAPI.name))
+        def st_endpoint(geom: Column): Column = ColumnAdapter(ST_Dimension(geom.expr, expressionConfig))
         def st_envelope(geom: Column): Column = ColumnAdapter(ST_Envelope(geom.expr, expressionConfig))
         def st_geometrytype(geom: Column): Column = ColumnAdapter(ST_GeometryType(geom.expr, expressionConfig))
         def st_hasvalidcoordinates(geom: Column, crsCode: Column, which: Column): Column =

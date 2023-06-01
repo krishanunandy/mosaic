@@ -39,6 +39,8 @@ trait MosaicGeometry extends GeometryWriter with Serializable {
 
     def isEmpty: Boolean
 
+    def getEndpoint: MosaicGeometry
+
     def getBoundary: MosaicGeometry
 
     def getShells: Seq[MosaicLineString]
