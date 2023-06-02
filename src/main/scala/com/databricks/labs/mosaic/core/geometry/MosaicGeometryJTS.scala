@@ -23,7 +23,7 @@ abstract class MosaicGeometryJTS(geom: Geometry) extends MosaicGeometry {
 
     override def getNumGeometries: Int = geom.getNumGeometries
 
-    override def getEndpoint: MosaicGeometryJTS = MosaicGeometryJTS(geom.asInstanceOf[MosaicLineStringJTS].getEndPoint())
+    override def getEndpoint: MosaicPointJTS = geom.asInstanceOf[MosaicLineStringJTS].asSeq.last
 
     def compactGeometry: MosaicGeometryJTS = {
         val geometries = for (i <- 0 until getNumGeometries) yield geom.getGeometryN(i)
