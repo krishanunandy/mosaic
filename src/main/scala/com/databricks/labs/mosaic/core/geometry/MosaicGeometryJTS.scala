@@ -27,7 +27,7 @@ abstract class MosaicGeometryJTS(geom: Geometry) extends MosaicGeometry {
          GeometryTypeEnum.fromString(geom.getGeometryType()) match {
             case POINT              => MosaicPointJTS.fromWKT("POINT EMPTY")
             case MULTIPOINT         => MosaicPointJTS.fromWKT("POINT EMPTY")
-            case LINESTRING         => MosaicPointJTS(geom.asInstanceOf[LineString].endPoint())
+            case LINESTRING         => MosaicPointJTS(geom.asInstanceOf[LineString].getEndPoint())
             case MULTILINESTRING    => MosaicPointJTS.fromWKT("POINT EMPTY")
             case POLYGON            => MosaicPointJTS.fromWKT("POINT EMPTY")
             case MULTIPOLYGON       => MosaicPointJTS.fromWKT("POINT EMPTY")
