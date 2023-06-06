@@ -11,7 +11,7 @@ import com.databricks.labs.mosaic.core.types.model.GeometryTypeEnum
 import com.databricks.labs.mosaic.core.types.model.GeometryTypeEnum._
 import com.esotericsoftware.kryo.Kryo
 import org.apache.spark.sql.catalyst.InternalRow
-import org.locationtech.jts.geom.{Geometry, GeometryCollection, GeometryFactory}
+import org.locationtech.jts.geom.{Geometry, GeometryCollection, GeometryFactory, LineString}
 import org.locationtech.jts.geom.util.AffineTransformation
 import org.locationtech.jts.io._
 import org.locationtech.jts.io.geojson.{GeoJsonReader, GeoJsonWriter}
@@ -23,7 +23,16 @@ abstract class MosaicGeometryJTS(geom: Geometry) extends MosaicGeometry {
 
     override def getNumGeometries: Int = geom.getNumGeometries
 
-    override def getEndpoint: MosaicPointJTS = geom.asInstanceOf[MosaicLineStringJTS].asSeq.last
+    override def getEndpoint: MosaicGeometryJTS = 
+         GeometryTypeEnum.fromString(geom.getGeometryType()) match {
+            case POINT              => MosaicPointJTS.fromWKT("POINT EMPTY")
+            case MULTIPOINT         => MosaicPointJTS.fromWKT("POINT EMPTY")
+            case LINESTRING         => MosaicPointJTS(geom.asInstanceOf[LineString].endPoint())
+            case MULTILINESTRING    => MosaicPointJTS.fromWKT("POINT EMPTY")
+            case POLYGON            => MosaicPointJTS.fromWKT("POINT EMPTY")
+            case MULTIPOLYGON       => MosaicPointJTS.fromWKT("POINT EMPTY")
+            case GEOMETRYCOLLECTION => MosaicPointJTS.fromWKT("POINT EMPTY")
+        }
 
     def compactGeometry: MosaicGeometryJTS = {
         val geometries = for (i <- 0 until getNumGeometries) yield geom.getGeometryN(i)

@@ -30,7 +30,16 @@ abstract class MosaicGeometryESRI(geom: OGCGeometry) extends MosaicGeometry {
             case GEOMETRYCOLLECTION => geom.asInstanceOf[OGCGeometryCollection].numGeometries()
         }
 
-    override def getEndpoint: MosaicPointESRI = MosaicPointESRI(geom.asInstanceOf[OGCLineString].endPoint())
+    override def getEndpoint: MosaicGeometryESRI = 
+         GeometryTypeEnum.fromString(geom.geometryType()) match {
+            case POINT              => MosaicPointESRI.fromWKT("POINT EMPTY")
+            case MULTIPOINT         => MosaicPointESRI.fromWKT("POINT EMPTY")
+            case LINESTRING         => MosaicPointESRI(geom.asInstanceOf[OGCLineString].endPoint())
+            case MULTILINESTRING    => MosaicPointESRI.fromWKT("POINT EMPTY")
+            case POLYGON            => MosaicPointESRI.fromWKT("POINT EMPTY")
+            case MULTIPOLYGON       => MosaicPointESRI.fromWKT("POINT EMPTY")
+            case GEOMETRYCOLLECTION => MosaicPointESRI.fromWKT("POINT EMPTY")
+        }
     
     def compactGeometry: MosaicGeometryESRI = {
         val geometries = GeometryTypeEnum.fromString(geom.geometryType()) match {
